@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Track Order | FoodDash</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body onload="refreshTracker()">
+    <nav>
+        <h2>📦 Order Status</h2>
+        <div>
+            <a href="index.html" style="color:white; margin-right:20px;">🏠 Home Menu</a>
+            <button class="btn" onclick="location.href='login.html'">Log out</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2 style="color: #1e272e;">Track Your Cravings</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Order #</th>
+                    <th>Date & Time</th>
+                    <th>Price</th>
+                    <th>Live Status</th>
+                </tr>
+            </thead>
+            <tbody id="tracker-tbody">
+                <!-- Orders Load Here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const user = JSON.parse(localStorage.getItem('user'));
+        if(!user) location.href = 'login.html';
+
+        async function refreshTracker() {
+            const res = await fetch('/api/orders/' + user.id);
+            const orders = await res.json();
+            const body = document.getElementById('tracker-tbody');
+
+            if(orders.length === 0) {
+                body.innerHTML = "<tr><td colspan='4' style='text-align:center'>No orders found. Buy some food!</td></tr>";
+                return;
+            }
+
+            body.innerHTML = orders.map(o => {
+                // Professional color classes for badges
+                let badgeClass = 'received';
+                if(o.status === 'Preparing') badgeClass = 'preparing';
+                if(o.status === 'Completed') badgeClass = 'completed';
+
+                return `
+                    <tr>
+                        <td><strong>#${o.id}</strong></td>
+                        <td>${new Date(o.order_date).toLocaleString()}</td>
+                        <td style="color:#27ae60; font-weight:bold">$${o.total_amount}</td>
+                        <td><span class="badge ${badgeClass}">${o.status}</span></td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // AUTO-UPDATE status every 5 seconds!
+        setInterval(refreshTracker, 5000);
+    </script>
+</body>
+</html>

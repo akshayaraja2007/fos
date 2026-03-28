@@ -1,0 +1,24 @@
+<link rel="stylesheet" href="style.css">
+<div style="height: 100vh; display:flex; justify-content:center; align-items:center; background: #1e272e;">
+    <div class="card" style="width: 400px;">
+        <h2>Login</h2>
+        <input type="email" id="email" placeholder="Email (admin@food.com)">
+        <input type="password" id="pass" placeholder="Password (admin123)">
+        <button class="btn" style="width:100%" onclick="login()">Enter FoodDash</button>
+        <p>New here? <a href="signup.html">Join Us</a></p>
+    </div>
+</div>
+<script>
+    async function login() {
+        const res = await fetch('/api/login', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ email: document.getElementById('email').value, password: document.getElementById('pass').value })
+        });
+        const data = await res.json();
+        if(data.success) {
+            localStorage.setItem('user', JSON.stringify(data.user));
+            location.href = data.user.role === 'admin' ? 'admin.html' : 'index.html';
+        } else alert("Invalid Login");
+    }
+</script>

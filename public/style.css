@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+* { box-sizing: border-box; font-family: 'Poppins', sans-serif; transition: 0.3s; }
+body { margin: 0; background: #f0f2f5; }
+nav { background: #1e272e; color: #fff; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+.container { padding: 40px 5%; max-width: 1200px; margin: auto; }
+.card { background: white; border-radius: 15px; padding: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); text-align: center; }
+.card img { width: 100%; border-radius: 10px; height: 200px; object-fit: cover; }
+.btn { background: #ff3f34; color: white; border: none; padding: 10px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+.btn:hover { background: #ef5777; transform: scale(1.05); }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; }
+table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; }
+th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
+th { background: #485460; color: white; }
+.badge { padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; text-transform: uppercase; }
+.received { background: #d2dae2; }
+.preparing { background: #ffd32a; }
+.completed { background: #05c46b; color: white; }

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard | Control</title>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        const u = JSON.parse(localStorage.getItem('user'));
+        if(!u || u.role !== 'admin') { alert('Restricted!'); location.href='login.html'; }
+    </script>
+</head>
+<body onload="initAdmin()">
+    <nav>
+        <h2>🏰 Control Dashboard (Admin)</h2>
+        <button class="btn" onclick="location.href='login.html'">Sign Out</button>
+    </nav>
+
+    <div class="container">
+        <!-- TOP ANALYTICS -->
+        <div class="grid" style="margin-bottom: 40px;">
+            <div class="card" style="border-left: 8px solid #2ecc71;">
+                <h4 style="margin:0; color:#888;">GROSS REVENUE</h4>
+                <h1 id="total-revenue" style="margin:10px 0; color:#1e272e;">$0.00</h1>
+            </div>
+            <div class="card" style="border-left: 8px solid #3498db;">
+                <h4 style="margin:0; color:#888;">TOTAL TRANSACTIONS</h4>
+                <h1 id="order-count" style="margin:10px 0; color:#1e272e;">0</h1>
+            </div>
+        </div>
+
+        <!-- ORDER MANAGEMENT TABLE -->
+        <div style="background:white; border-radius:15px; padding:25px; box-shadow:0 10px 30px rgba(0,0,0,0.05);">
+            <h3 style="margin-top:0;">Recent Kitchen Tickets</h3>
+            <table style="width:100%">
+                <thead>
+                    <tr style="text-align:left; border-bottom: 2px solid #f4f4f4;">
+                        <th>ID</th>
+                        <th>User Name</th>
+                        <th>Sale Amount</th>
+                        <th>Live Status</th>
+                        <th>Management Action</th>
+                    </tr>
+                </thead>
+                <tbody id="admin-tbody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        async function initAdmin() {
+            const res = await fetch('/api/admin/all');
+            const data = await res.json();
+            
+            // Fill Analytics
+            document.getElementById('total-revenue').innerText = "$" + Number(data.stats.sales || 0).toFixed(2);
+            document.getElementById('order-count').innerText = data.stats.count;
+
+            // Fill Management Table
+            const body = document.getElementById('admin-tbody');
+            body.innerHTML = data.orders.map(o => {
+                let statusBadge = (o.status === 'Completed' ? 'completed' : (o.status === 'Preparing' ? 'preparing' : 'received'));
+                
+                return `
+                <tr>
+                    <td>#${o.id}</td>
+                    <td><b>${o.user_name}</b></td>
+                    <td>$${o.total_amount}</td>
+                    <td><span class="badge ${statusBadge}">${o.status}</span></td>
+                    <td>
+                        <select style="width: auto; margin:0;" onchange="updateOrderStatus(${o.id}, this.value)">
+                            <option value="">-- Change State --</option>
+                            <option value="Order Received">Received</option>
+                            <option value="Preparing">Preparing Now</option>
+                            <option value="Completed">Ready/Completed</option>
+                        </select>
+                    </td>
+                </tr>`;
+            }).join('');
+        }
+
+        async function updateOrderStatus(id, newStatus) {
+            if(!newStatus) return;
+            await fetch('/api/admin/update', {
+                method: 'POST',
+                headers: {'Content-Type':'application/json'},
+                body: JSON.stringify({ id: id, status: newStatus })
+            });
+            initAdmin(); // Instantly refresh statistics and table
+        }
+    </script>
+</body>
+</html>

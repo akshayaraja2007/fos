@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account | Food Express</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Specific centering for the auth box */
+        .auth-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #d63031 0%, #fab1a0 100%);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="auth-wrapper">
+        <div class="modal-content" style="display: block; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+            <h2 style="text-align: center; color: #d63031;">Join Food Express</h2>
+            <p style="text-align: center; color: #666;">Create an account to start ordering</p>
+            
+            <label>Full Name</label>
+            <input type="text" id="signup-name" placeholder="John Doe">
+            
+            <label>Email Address</label>
+            <input type="email" id="signup-email" placeholder="john@example.com">
+            
+            <label>Password</label>
+            <input type="password" id="signup-pass" placeholder="••••••••">
+            
+            <button class="btn" style="width:100%; margin-top: 20px;" onclick="handleSignUp()">Sign Up</button>
+            
+            <p style="text-align: center; margin-top: 15px;">
+                Already have an account? <a href="login.html" style="color: #d63031; font-weight: bold; text-decoration: none;">Login here</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        async function handleSignUp() {
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-pass').value;
+
+            if(!name || !email || !password) {
+                return alert("Please fill in all fields");
+            }
+
+            try {
+                const response = await fetch('/api/signup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert("Account created successfully! Please login.");
+                    window.location.href = 'login.html';
+                } else {
+                    alert(data.error || "Signup failed. Try a different email.");
+                }
+            } catch (err) {
+                console.error("Error during signup:", err);
+                alert("Server error. Is the node server running?");
+            }
+        }
+    </script>
+</body>
+</html>
