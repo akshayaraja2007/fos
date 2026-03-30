@@ -10,3 +10,8 @@
 [28/3/2026, 8:16:20 pm] -> STATUS UPDATE: Order #1 moved to status [Order Received]
 [28/3/2026, 8:16:27 pm] -> STATUS UPDATE: Order #1 moved to status [Completed]
 [28/3/2026, 8:16:33 pm] -> USER LOGIN: demo1@gmail.com logged in.
+[30/3/2026, 6:36:15 pm] -> USER LOGIN: demo1@gmail.com logged in.
+[30/3/2026, 6:36:17 pm] -> USER LOGIN: demo1@gmail.com logged in.
+[30/3/2026, 6:36:44 pm] -> SUCCESSFUL PAYMENT: $15.5 paid by demo1 (UserID: 6)
+[30/3/2026, 6:37:13 pm] -> USER LOGIN: admin@food.com logged in.
+[30/3/2026, 6:37:20 pm] -> STATUS UPDATE: Order #2 moved to status [Preparing]

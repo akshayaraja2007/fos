@@ -1,0 +1,8 @@
+USE food_system;
+SHOW TABLES;
+DESCRIBE users;
+DESCRIBE orders;
+DESCRIBE products;
+SELECT * FROM users;
+SELECT * FROM products;
+SELECT * FROM orders ORDER BY order_date DESC;
